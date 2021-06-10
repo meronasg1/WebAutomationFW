@@ -165,6 +165,20 @@ public class HomePage {
         cart.click();
     }
 
+    @FindBy(id="twotabsearchtextbox")
+    private WebElement searchBox;
+
+    public void typeOnSearchBox(String data){
+        searchBox.sendKeys(data);
+    }
+
+    @FindBy(id="nav-search-submit-button")
+    private WebElement searchBtn;
+
+    public void clickOnSearchBtn(){
+        searchBtn.click();
+    }
+
 
 
 }

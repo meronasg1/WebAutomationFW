@@ -1,7 +1,9 @@
 package com.amazon.tests;
+import com.amazon.data.DataProversForTest2;
 import com.amazon.data.DataProvidersForTest;
 import com.amazon.pages.CreateAccountPage;
 import com.amazon.pages.HomePage;
+import com.amazon.pages.SearchPage;
 import com.amazon.pages.SignInPage;
 import com.aventstack.extentreports.ExtentTest;
 import com.pnt.base.ConnectDB;
@@ -13,6 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -29,12 +32,14 @@ public class SearchTest extends TestBase {
     private HomePage homePage;
     private CreateAccountPage createAccountPage;
     private SignInPage signInPage;
+    private SearchPage searchPage;
 
     @BeforeMethod
     public void setUpPOM(){
         homePage=PageFactory.initElements(driver, HomePage.class);
         createAccountPage=PageFactory.initElements(driver, CreateAccountPage.class);
         signInPage=PageFactory.initElements(driver, SignInPage.class);
+        searchPage=PageFactory.initElements(driver,SearchPage.class);
     }
 
 
@@ -214,5 +219,18 @@ public class SearchTest extends TestBase {
         ExtentTestManager.log("Clicked on the search button", LOGGER);
 
     }
+
+    @Test(dataProviderClass = DataProversForTest2.class, dataProvider = "searchData")
+    public void validateUserBeingAbleToSearchForItemsOnAmazon(String data){
+        homePage.typeOnSearchBox(data);
+        homePage.clickOnSearchBtn();
+        String actual =searchPage.validateSearchItem();
+        String expected = "\""+data+"\"";
+        Assert.assertEquals(actual, expected, "Item didnot match properly");
+        ExtentTestManager.log(data+"typed in search bar", LOGGER );
+
+    }
+
+
 
 }
